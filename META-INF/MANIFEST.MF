@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: revpi-dio-java
+Bundle-SymbolicName: revpi-dio-java
+Bundle-Description: Revolution Pi Digital IO Enhancement Board JNI wrapper
+Bundle-Version: 0.1.0
+Export-Package: org.clehne.revpi.dataio 
+Import-Package: org.clehne.revpi.dataio
+
