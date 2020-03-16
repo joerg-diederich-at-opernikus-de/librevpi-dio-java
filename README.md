@@ -19,6 +19,10 @@ These instructions will get you a copy of the project on your rev pi and build t
 
 Use the resulting library [./dist/librevpi-dio-java.jar](./dist/librevpi-dio-java.jar) for your needs.
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
 ## Contributing
 
 * The basic project sceleton is copied from [waal70 - libsocket-can-java.git](https://github.com/waal70/libsocket-can-java.git)
@@ -29,9 +33,6 @@ Use the resulting library [./dist/librevpi-dio-java.jar](./dist/librevpi-dio-jav
 
 * **C. Lehne** - *initial* - 
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
