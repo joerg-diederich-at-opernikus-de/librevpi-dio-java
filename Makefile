@@ -22,12 +22,12 @@ endif
 JAVA_INCLUDES=-I$(JAVA_HOME)/include/linux -I$(JAVA_HOME)/include
 JAVA=$(JAVA_HOME)/bin/java
 JAVAC=$(JAVA_HOME)/bin/javac
-JAVAH=$(JAVA_HOME)/bin/javah
+JAVAH=$(JAVA_HOME)/bin/javac
 JAR=$(JAVA_HOME)/bin/jar
 JAVA_SRC:=$(shell find src -type f -and -name '*.java')
 JAVA_TEST_SRC:=$(shell find src.test -type f -and -name '*.java')
 #JNI_SRC:=$(shell find jni -type f -and -regex '^.*\.\(c\|cpp\|h\)$$')
-JNI_SRC:=$(shell find jni -type f -and -regex '^.*\.\(c\|cpp\|h\)')
+JNI_SRC:=$(shell find jni/src -type f -and -regex '^.*\.\(c\|cpp\)')
 JAVA_DEST=classes
 JAVA_TEST_DEST=classes.test
 LIB_DEST=lib
@@ -35,12 +35,11 @@ JAR_DEST=dist
 JAR_DEST_FILE=$(JAR_DEST)/$(NAME).jar
 JAR_MANIFEST_FILE=META-INF/MANIFEST.MF
 DIRS=stamps obj $(JAVA_DEST) $(JAVA_TEST_DEST) $(LIB_DEST) $(JAR_DEST)
-JNI_DIR=jni
-JNI_CLASSES=org.clehne.revpi.dataio.DataInOut
+JNI_DIR=jni/generated
+JNI_CLASSES=org.clehne.revpi.dataio.DataInOut	\
+	org.clehne.revpi.ledio.LedInOut
 JAVAC_FLAGS=-g -Xlint:all
-CXXFLAGS=-I./include -I./include/picontrol -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions \
--fstack-protector --param=ssp-buffer-size=4 -fPIC -Wno-unused-parameter \
--pedantic -D_REENTRANT -D_GNU_SOURCE \
+CXXFLAGS=-I./include -I./include/picontrol -I./jni/src -I./jni/generated\
 $(JAVA_INCLUDES)
 SONAME=jni_revpi_dio
 LDFLAGS=-Wl,-soname,$(SONAME)
@@ -57,8 +56,7 @@ all: stamps/create-jar stamps/compile-test
 .PHONY: clean
 clean:
 		$(RM) -r $(DIRS) $(STAMPS) $(filter %.h,$(JNI_SRC))
-		$(RM) -r $(JNI_DIR)/*.h
-		$(RM) -r $(JNI_DIR)/*.gch
+		$(RM) -r $(JNI_DIR)/*
 
 stamps/dirs:
 		mkdir $(DIRS)
@@ -74,13 +72,13 @@ stamps/compile-test: stamps/compile-src $(JAVA_TEST_SRC)
 		@touch $@
 
 stamps/generate-jni-h: stamps/compile-src
-		$(JAVAH) -jni -d $(JNI_DIR) -classpath $(JAVA_DEST) \
-                $(JNI_CLASSES)
+		$(JAVAH) -h $(JNI_DIR) -d $(JNI_DIR) -classpath $(JAVA_DEST) \
+                $(JAVA_SRC)
 		@touch $@
 
 stamps/compile-jni: stamps/generate-jni-h $(JNI_SRC)
 		$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o $(LIB_DEST)/lib$(SONAME).so \
-                $(sort $(filter %.cpp,$(JNI_SRC)) $(filter %.c,$(JNI_SRC)))
+                $(sort $(filter %.cpp,$(JNI_SRC)) $(filter %.c,$(JNI_SRC))) -lc
 		@touch $@
         
 stamps/create-jar: stamps/compile-jni $(JAR_MANIFEST_FILE)

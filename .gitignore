@@ -16,10 +16,6 @@
 *.dylib
 *.dll
 
-# Fortran module files
-*.mod
-*.smod
-
 # Compiled Static libraries
 *.lai
 *.la
@@ -39,3 +35,8 @@
 /bin/
 /bintest/
 /Default/
+jni/generated
+
+# misc
+/stamps
+/dist
