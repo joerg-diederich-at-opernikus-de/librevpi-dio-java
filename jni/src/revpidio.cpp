@@ -48,7 +48,7 @@ JNIEXPORT jint JNICALL Java_org_clehne_revpi_dataio_DataInOut__1setDataOut
 		return -2;
 	}
 	snprintf(channelName, 20, "O_%d", channel);
-	ret = writeVariableValue(fd, (char*)channelName, value);
+	ret = writeVariableBit(fd, (char*)channelName, ((value > 0)?true:false));
 	return ret;
 }
 
@@ -61,7 +61,7 @@ JNIEXPORT jint JNICALL Java_org_clehne_revpi_dataio_DataInOut__1getDataOut
 		return -1;
 	}
 	snprintf(channelName, 20, "O_%d", channel);
-	ret = readVariableValue(fd, (char*)channelName);
+	ret = readVariableBit(fd, (char*)channelName);
 	return ret;
 }
 
@@ -74,6 +74,6 @@ JNIEXPORT jint JNICALL Java_org_clehne_revpi_dataio_DataInOut__1getDataIn
 		return -1;
 	}
 	snprintf(channelName, 20, "I_%d", channel);
-	ret = readVariableValue(fd, (char*)channelName);
+	ret = readVariableBit(fd, (char*)channelName);
 	return ret;
 }

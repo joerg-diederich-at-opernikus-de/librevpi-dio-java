@@ -1,6 +1,5 @@
 #include "org_clehne_revpi_ledio_LedInOut.h"
 #include "revpi.h"
-#include "piControlFunc.h"
 #include "piControl.h"
 
 #include "jni.h"
@@ -50,17 +49,17 @@ JNIEXPORT jint JNICALL Java_org_clehne_revpi_ledio_LedInOut__1setValue
 
 	(void) env;
 	(void) obj;
-	ret = writeVariableValue(fd, RevPiLedChanName.c_str(), value);
+	ret = writeVariableWord(fd, RevPiLedChanName.c_str(), 1, value);
 	return ret;
 }
 
-JNIEXPORT jint JNICALL Java_org_clehne_revpi_ledio_LedInOut__1getValue
+JNIEXPORT jlong JNICALL Java_org_clehne_revpi_ledio_LedInOut__1getValue
   (JNIEnv *env, jclass obj, jint fd){
-	int ret;
+	long ret;
 
 	(void) env;
 	(void) obj;
-	ret = readVariableValue(fd, RevPiLedChanName.c_str());
+	ret = readVariableWord(fd, RevPiLedChanName.c_str());
 	return ret;
 }
 

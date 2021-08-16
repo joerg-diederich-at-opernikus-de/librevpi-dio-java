@@ -43,11 +43,11 @@ public final class LedInOut extends LibLedInOut implements Closeable {
 	}
 	
 	public int getValue() throws IOException {
-		int val = _getValue(_fd);
+		long val = _getValue(_fd);
 		if(val < 0) {
 			throw new IOException("Error getting value, retCode " + val);
 		}
-		return val;
+		return Long.valueOf(val).intValue();
 	}
 	
 
@@ -55,7 +55,7 @@ public final class LedInOut extends LibLedInOut implements Closeable {
 	private static native void _close(final int fd) throws IOException;
 
 	private static native int _setValue(final int fd, int value);
-	private static native int _getValue(final int fd);
+	private static native long _getValue(final int fd);
 	private static native int _setBit(final int fd, int bit, int value);
 	private static native int _getBit(final int fd, int bit);
 }

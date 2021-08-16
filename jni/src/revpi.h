@@ -21,12 +21,18 @@ inline void throwIOExceptionMsg(JNIEnv *env, const std::string& msg) {
 }
 
 void logthis(std::string);
-int readVariableValue(jint fd, char const *pszVariableName);
-int writeVariableValue(jint fd, char const *, uint32_t);
-
+long readVariableWord(jint fd, char const *pszVariableName);
+int writeVariableWord(jint fd,
+		const char * pszVariableName,
+		std::size_t len,
+		uint32_t i32uValue);
+int readVariableBit(jint fd, char const * pszVariableName);
 int readVariableBit(jint fd,
 		char const * pszVariableName,
 		unsigned char btPos);
+int writeVariableBit(jint fd,
+		char const * pszVariableName,
+		bool val);
 int writeVariableBit(jint fd,
 		char const * pszVariableName,
 		unsigned char btPos,

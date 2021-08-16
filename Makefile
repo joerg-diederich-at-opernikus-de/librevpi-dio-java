@@ -17,7 +17,6 @@ endif
 ifeq ($(OS),Windows_NT)
        JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.8.0_121/"
 endif
-##JAVA_HOME=/usr
 
 JAVA_INCLUDES=-I$(JAVA_HOME)/include/linux -I$(JAVA_HOME)/include
 JAVA=$(JAVA_HOME)/bin/java
@@ -39,8 +38,8 @@ JNI_DIR=jni/generated
 JNI_CLASSES=org.clehne.revpi.dataio.DataInOut	\
 	org.clehne.revpi.ledio.LedInOut
 JAVAC_FLAGS=-g -Xlint:all
-CXXFLAGS=-I./include -I./include/picontrol -I./jni/src -I./jni/generated\
-$(JAVA_INCLUDES)
+CXXFLAGS=-I./include -I./include/picontrol -I./jni/src -I./jni/src/picontrol -I./jni/generated\
+$(JAVA_INCLUDES) -fPIC
 SONAME=jni_revpi_dio
 LDFLAGS=-Wl,-soname,$(SONAME)
 REMOTE=169.254.23.187#192.168.29.250#
@@ -78,7 +77,7 @@ stamps/generate-jni-h: stamps/compile-src
 
 stamps/compile-jni: stamps/generate-jni-h $(JNI_SRC)
 		$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared -o $(LIB_DEST)/lib$(SONAME).so \
-                $(sort $(filter %.cpp,$(JNI_SRC)) $(filter %.c,$(JNI_SRC))) -lc
+                $(sort $(filter %.cpp,$(JNI_SRC)) $(filter %.c,$(JNI_SRC)))
 		@touch $@
         
 stamps/create-jar: stamps/compile-jni $(JAR_MANIFEST_FILE)
